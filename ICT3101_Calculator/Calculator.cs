@@ -248,8 +248,10 @@ namespace ICT3101_Calculator
 
         public double GenMagicNum(double input, IFileReader fileReader)
         {
+            // Input will serve as index - if positive value * 2 else * -2 
             double result = 0;
             int choice = Convert.ToInt16(input);
+
             string[] magicStrings = fileReader.Read("../../../MagicNumbers.txt");
 
             Console.WriteLine(string.Join(", ", magicStrings));

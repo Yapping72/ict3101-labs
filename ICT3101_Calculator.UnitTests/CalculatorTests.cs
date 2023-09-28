@@ -1,19 +1,22 @@
 using ICT3101_Calculator;
+using Moq;
 
 namespace ICT3101_Calculator.UnitTests
 {
     public class CalculatorTests
     {
         private Calculator _calculator;
-        private FileReader _fileReader;
+        private Mock<IFileReader> _fileReader;
         private string _magicNumberPath = "../../../MagicNumbers.txt";
 
         [SetUp]
         public void Setup()
         {
             // Arrange
+            _fileReader = new Mock<IFileReader>();
+            _fileReader.Setup(fr =>
+            fr.Read("../../../MagicNumbers.txt")).Returns(new string[20] { "1", "2", "3", "4", "5", "-6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" });
             _calculator = new Calculator();
-            _fileReader = new FileReader();
         }
         [Test]
         public void Add_WhenAddingTwoNumbers_ResultEqualToSum()
@@ -232,10 +235,10 @@ namespace ICT3101_Calculator.UnitTests
         [Test]
         public void GenMagicNum_WithValidInput_ReturnsCorrectValue()
         {
-            double input = 5;  // For example
-            double expectedOutput = 2 * Convert.ToDouble(File.ReadAllLines(_magicNumberPath)[(int)input]);
+            double input = 5;
+            double expectedOutput = 2 * 6;
 
-            double result = _calculator.GenMagicNum(input, _fileReader);
+            double result = _calculator.GenMagicNum(input, _fileReader.Object);
             Assert.AreEqual(expectedOutput, result);
         }
 
@@ -243,9 +246,9 @@ namespace ICT3101_Calculator.UnitTests
         public void GenMagicNum_WithLowestValidInput_ReturnsCorrectValue()
         {
             double input = 0;
-            double expectedOutput = 2 * Convert.ToDouble(File.ReadAllLines(_magicNumberPath)[(int)input]);
+            double expectedOutput = 2 * 1;
 
-            double result = _calculator.GenMagicNum(input, _fileReader);
+            double result = _calculator.GenMagicNum(input, _fileReader.Object);
             Assert.AreEqual(expectedOutput, result);
         }
 
@@ -253,9 +256,9 @@ namespace ICT3101_Calculator.UnitTests
         public void GenMagicNum_WithHighestValidInput_ReturnsCorrectValue()
         {
             double input = 15;
-            double expectedOutput = 2 * Convert.ToDouble(File.ReadAllLines(_magicNumberPath)[(int)input]);
+            double expectedOutput = 2 * 16;
 
-            double result = _calculator.GenMagicNum(input, _fileReader);
+            double result = _calculator.GenMagicNum(input, _fileReader.Object);
             Assert.AreEqual(expectedOutput, result);
         }
 
@@ -264,8 +267,9 @@ namespace ICT3101_Calculator.UnitTests
         {
             double input = 20;  // This is out of range for the file content we provided
 
-            double result = _calculator.GenMagicNum(input, _fileReader);
+            double result = _calculator.GenMagicNum(input, _fileReader.Object);
             Assert.AreEqual(0, result);  // Should return 0
         }
+
     }
 }
