@@ -5,11 +5,15 @@ namespace ICT3101_Calculator.UnitTests
     public class CalculatorTests
     {
         private Calculator _calculator;
+        private FileReader _fileReader;
+        private string _magicNumberPath = "../../../MagicNumbers.txt";
+
         [SetUp]
         public void Setup()
         {
             // Arrange
             _calculator = new Calculator();
+            _fileReader = new FileReader();
         }
         [Test]
         public void Add_WhenAddingTwoNumbers_ResultEqualToSum()
@@ -83,17 +87,6 @@ namespace ICT3101_Calculator.UnitTests
             // Assert
             Assert.That(result, Is.EqualTo(2));
         }
-
-        /*
-        [Test]
-        [TestCase(0, 0)]
-        [TestCase(0, 10)]
-        [TestCase(10, 0)]
-        public void Divide_WithZerosAsInputs_ResultThrowArgumentException(double a, double b)
-        {
-            Assert.That(() => _calculator.Divide(a, b), Throws.ArgumentException);
-        }
-        */
 
         [Test]
         public void CalculateTriangleArea_WithPositiveHeightAndLength_ReturnsCorrectArea()
@@ -234,6 +227,45 @@ namespace ICT3101_Calculator.UnitTests
             // Act
             // Assert
             Assert.That(() => _calculator.UnknownFunctionB(4, 5), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void GenMagicNum_WithValidInput_ReturnsCorrectValue()
+        {
+            double input = 5;  // For example
+            double expectedOutput = 2 * Convert.ToDouble(File.ReadAllLines(_magicNumberPath)[(int)input]);
+
+            double result = _calculator.GenMagicNum(input, _fileReader);
+            Assert.AreEqual(expectedOutput, result);
+        }
+
+        [Test]
+        public void GenMagicNum_WithLowestValidInput_ReturnsCorrectValue()
+        {
+            double input = 0;
+            double expectedOutput = 2 * Convert.ToDouble(File.ReadAllLines(_magicNumberPath)[(int)input]);
+
+            double result = _calculator.GenMagicNum(input, _fileReader);
+            Assert.AreEqual(expectedOutput, result);
+        }
+
+        [Test]
+        public void GenMagicNum_WithHighestValidInput_ReturnsCorrectValue()
+        {
+            double input = 15;
+            double expectedOutput = 2 * Convert.ToDouble(File.ReadAllLines(_magicNumberPath)[(int)input]);
+
+            double result = _calculator.GenMagicNum(input, _fileReader);
+            Assert.AreEqual(expectedOutput, result);
+        }
+
+        [Test]
+        public void GenMagicNum_WithInvalidInput_ReturnsZero()
+        {
+            double input = 20;  // This is out of range for the file content we provided
+
+            double result = _calculator.GenMagicNum(input, _fileReader);
+            Assert.AreEqual(0, result);  // Should return 0
         }
     }
 }

@@ -6,9 +6,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using FluentAssertions.Equivalency;
 
 namespace ICT3101_Calculator
-{   public class Calculator
+{
+    public class Calculator
     {
         public Calculator() { }
         public double DoOperation(double num1, double num2, string op, double num3=0.0)
@@ -50,6 +53,10 @@ namespace ICT3101_Calculator
                     break;
                 case "ssi":
                     result = CalculateNewSSI(num1, num2, num3);
+                    break;
+                case "magic":
+                    IFileReader fileReader = new FileReader();
+                    result = GenMagicNum(num1, fileReader);
                     break;
                 // Return text for an incorrect option entry.
                 default:
@@ -237,6 +244,21 @@ namespace ICT3101_Calculator
         {
             double newSSI = previousSSI + newLinesOfCode - deletedLinesOfCode;
             return newSSI;
+        }
+
+        public double GenMagicNum(double input, IFileReader fileReader)
+        {
+            double result = 0;
+            int choice = Convert.ToInt16(input);
+            string[] magicStrings = fileReader.Read("../../../MagicNumbers.txt");
+
+            Console.WriteLine(string.Join(", ", magicStrings));
+            if ((choice >= 0) && (choice < magicStrings.Length))
+            {
+                result = Convert.ToDouble(magicStrings[choice]);
+            }
+            result = (result > 0) ? (2 * result) : (-2 * result);
+            return result;
         }
     }
 }

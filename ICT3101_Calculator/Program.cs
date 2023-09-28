@@ -58,7 +58,7 @@ class Program
             Console.WriteLine("\tavgef - Average Number of Expected Failures");
             Console.WriteLine("\tdd - Calculate Defect Density");
             Console.WriteLine("\tssi - Calculate SSI");
-
+            Console.WriteLine("\tmagic - Magic Number");
             Console.Write("Your option? ");
 
             string op = Console.ReadLine();
