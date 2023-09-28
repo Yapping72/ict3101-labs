@@ -54,17 +54,11 @@ jobs:
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-    defaults:
-      run:
-        working-directory: ICT3101_Calculator
-
     env:
-      Solution_Name: ICT3101_Calculator.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
+      Solution_Name: ICT3101_Calculator\ICT3101_Calculator.sln                  # Replace with your solution name, i.e. MyWpfApp.sln.
       Test_Project_Path: ICT3101_Calculator.UnitTests\ICT3101_Calculator.UnitTests.csproj               # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       SpecFlow_Path: SpecFlowCalculatorTest\SpecFlowCalculatorTest.csproj
-      # Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
-      # Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-
+  
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -87,8 +81,8 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
         
-    - name: NUnit Tests
+    - name: Execute unit tests
       run: dotnet test $env:Test_Project_Path --no-build --verbosity normal
-      
-    - name: SpecFlow Tests
+    
+    - name: Execute SpecFlow tests
       run: dotnet test $env:SpecFlow_Path --no-build --verbosity normal
